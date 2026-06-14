@@ -809,3 +809,13 @@ label {
   .lg\:py-24 { padding-top: 6rem; padding-bottom: 6rem; }
   .lg\:py-28 { padding-top: 7rem; padding-bottom: 7rem; }
 }
+
+/* ============ ICON-INPUT PADDING FIX ============ */
+/* Aturan global input[type=...] (specificity 0,1,1) menimpa utility .pl-11
+   (0,1,0), sehingga teks menumpuk di belakang icon. Selector input.pl-N di
+   bawah ini punya specificity sama (0,1,1) tapi ditempatkan lebih akhir,
+   jadi menang dan padding kiri untuk ruang icon kembali diterapkan. */
+input.pl-9,  select.pl-9  { padding-left: 2.25rem; }
+input.pl-10, select.pl-10 { padding-left: 2.5rem; }
+input.pl-11, select.pl-11 { padding-left: 2.75rem; }
+input.pl-12, select.pl-12 { padding-left: 3rem; }
