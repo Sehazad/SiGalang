@@ -644,3 +644,26 @@ label {
 .input-group-fixed input {
   padding-left: 2.75rem;
 }
+/* ==================== LAYOUT UTILITY SAFETY-NET ==================== */
+/* Tailwind v4 di setup ini tidak selalu meng-generate utility container/
+   spacing, sehingga konten menempel ke tepi kiri. Definisi plain-CSS ini
+   menjamin centering + padding halaman tetap bekerja. Aman: kalau Tailwind
+   sudah meng-generate-nya, nilai ini identik (tidak ada efek samping). */
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.max-w-sm  { max-width: 24rem; }
+.max-w-md  { max-width: 28rem; }
+.max-w-lg  { max-width: 32rem; }
+.max-w-xl  { max-width: 36rem; }
+.max-w-2xl { max-width: 42rem; }
+.max-w-3xl { max-width: 48rem; }
+.max-w-7xl { max-width: 80rem; }
+
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+
+@media (min-width: 640px) {
+  .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+}
