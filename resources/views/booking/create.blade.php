@@ -79,20 +79,33 @@
                     <h2 class="text-xl font-extrabold text-[#0F172A]">2. Pilih Waktu Main</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Tanggal --}}
-                    <div class="space-y-2">
-                        <label for="tanggal_main" class="block text-sm font-bold text-slate-700">Tanggal Main</label>
-                        <input
-                            type="date"
-                            id="tanggal_main"
-                            name="tanggal_main"
-                            x-model="tanggal_main"
-                            @change="fetchJadwal()"
-                            min="{{ date('Y-m-d') }}"
-                            class="w-full rounded-2xl border-slate-200 bg-white/50 px-4 py-3.5 text-[#0F172A] focus:border-brand focus:ring-4 focus:ring-brand/10 transition-all duration-200 font-medium"
-                            required
-                        />
+                <div class="space-y-6">
+                    {{-- Tanggal — Date Picker ala Tix ID --}}
+                    <div class="space-y-3">
+                        <label class="block text-sm font-bold text-slate-700">Tanggal Main</label>
+                        <div class="flex gap-2.5 overflow-x-auto pb-2 px-1 -mx-1 snap-x" style="scrollbar-width:thin;">
+                            <template x-for="d in dates" :key="d.iso">
+                                <button type="button"
+                                    @click="d.libur ? null : selectDate(d.iso)"
+                                    :disabled="d.libur"
+                                    class="snap-start shrink-0 w-[4.5rem] rounded-2xl border-2 py-3 flex flex-col items-center gap-0.5 transition-all duration-200 relative"
+                                    :class="tanggal_main === d.iso
+                                        ? 'border-brand bg-brand text-white shadow-brand'
+                                        : (d.libur
+                                            ? 'border-slate-200 bg-slate-100 text-slate-300 cursor-not-allowed'
+                                            : 'border-slate-200 bg-white text-slate-700 hover:border-brand hover:bg-brand/5')">
+                                    <span class="text-[11px] font-bold uppercase tracking-wide" x-text="d.dayName"></span>
+                                    <span class="text-2xl font-black leading-none" x-text="d.dayNum"></span>
+                                    <span class="text-[10px] font-semibold uppercase" x-text="d.monthName"></span>
+                                    <span x-show="d.libur" x-cloak class="absolute -top-2 left-1/2 -translate-x-1/2 text-[8px] font-black bg-red-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wider whitespace-nowrap">Libur</span>
+                                </button>
+                            </template>
+                        </div>
+                        <input type="hidden" name="tanggal_main" x-model="tanggal_main" required />
+                        <p x-show="selectedLiburReason" x-cloak class="text-xs text-red-600 font-semibold flex items-center gap-1.5 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            <span>Tanggal ini <b>tutup/libur</b> (<span x-text="selectedLiburReason"></span>). Silakan pilih tanggal lain.</span>
+                        </p>
                     </div>
 
                     {{-- Jam Mulai --}}
@@ -111,7 +124,7 @@
                                     <option value="" disabled selected>Pilih lapangan & tanggal dulu</option>
                                 </template>
                                 <template x-if="id_lapangan && tanggal_main && availableHours.length === 0 && !isLoading">
-                                    <option value="" disabled selected>Jadwal penuh</option>
+                                    <option value="" disabled selected>Jadwal penuh / libur</option>
                                 </template>
                                 <template x-if="id_lapangan && tanggal_main && availableHours.length > 0">
                                     <option value="" disabled selected>-- Pilih Jam --</option>
@@ -121,7 +134,7 @@
                                 </template>
                             </select>
                         </div>
-                        <p class="text-xs text-red-500 font-semibold mt-1.5 flex items-center gap-1" x-show="id_lapangan && tanggal_main && availableHours.length === 0 && !isLoading" x-cloak>
+                        <p class="text-xs text-red-500 font-semibold mt-1.5 flex items-center gap-1" x-show="id_lapangan && tanggal_main && availableHours.length === 0 && !isLoading && !selectedLiburReason" x-cloak>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Semua jam pada tanggal ini sudah dibooking.
                         </p>
@@ -186,6 +199,38 @@
             jam_mulai: '',
             availableHours: [],
             isLoading: false,
+            dates: [],
+            liburMap: @json($liburDates ?? []),
+            selectedLiburReason: '',
+
+            init() {
+                this.buildDates();
+            },
+
+            buildDates() {
+                const dayNames = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+                const monthNames = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+                const today = new Date();
+                const arr = [];
+                for (let i = 0; i < 30; i++) {
+                    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+                    const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+                    arr.push({
+                        iso: iso,
+                        dayName: dayNames[d.getDay()],
+                        dayNum: d.getDate(),
+                        monthName: monthNames[d.getMonth()],
+                        libur: Object.prototype.hasOwnProperty.call(this.liburMap, iso),
+                    });
+                }
+                this.dates = arr;
+            },
+
+            selectDate(iso) {
+                this.tanggal_main = iso;
+                this.selectedLiburReason = this.liburMap[iso] || '';
+                this.fetchJadwal();
+            },
 
             fetchJadwal() {
                 this.jam_mulai = '';
@@ -194,7 +239,10 @@
                     fetch(`/booking/jadwal?id_lapangan=${this.id_lapangan}&tanggal=${this.tanggal_main}`)
                         .then(res => res.json())
                         .then(data => {
-                            this.availableHours = data.available_hours;
+                            this.availableHours = data.available_hours || [];
+                            if (data.is_holiday) {
+                                this.selectedLiburReason = data.holiday_reason || 'Hari Libur';
+                            }
                             this.isLoading = false;
                         })
                         .catch(() => {
