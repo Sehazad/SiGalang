@@ -1,0 +1,646 @@
+@import "tailwindcss";
+
+@source "../views/**/*.blade.php";
+@source "../js/**/*.js";
+@source "../../app/**/*.php";
+
+/* ==================== THEME TOKENS (Tailwind v4) ==================== */
+@theme {
+  --color-brand: #0EA5E9;
+  --color-brand-dark: #0284C7;
+  --color-accent: #10B981;
+  --color-dark: #0F172A;
+  --color-dark-2: #1E293B;
+  --color-dark-3: #334155;
+  --color-light: #F8FAFC;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --spacing-4.5: 1.125rem;
+  --spacing-5.5: 1.375rem;
+  --shadow-brand: 0 10px 25px rgba(14, 145, 233, 0.15);
+  --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* ==================== RESET & BASE ==================== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F8FAFC;
+  color: #0F172A;
+  line-height: 1.5;
+}
+
+/* ==================== FORM ELEMENTS ==================== */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="number"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1.5px solid #E2E8F0;
+  background-color: #FFFFFF;
+  padding: 0.8125rem 1rem;
+  font-size: 0.875rem;
+  color: #0F172A;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #0EA5E9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+  background-color: #FAFCFF;
+}
+
+input[type="text"]:disabled,
+input[type="email"]:disabled,
+input[type="password"]:disabled,
+input[type="date"]:disabled,
+input[type="number"]:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #F1F5F9;
+  color: #94A3B8;
+  cursor: not-allowed;
+  border-color: #E2E8F0;
+}
+
+input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 0.25rem;
+  border: 1.5px solid #CBD5E1;
+  cursor: pointer;
+  accent-color: #0EA5E9;
+}
+
+input[type="radio"] {
+  cursor: pointer;
+  accent-color: #0EA5E9;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.375rem;
+  letter-spacing: 0.01em;
+}
+
+/* ==================== DARK FORM OVERRIDES (Auth pages) ==================== */
+/* Override global input styles for dark-themed input fields */
+.dark-input {
+  background-color: rgba(15, 23, 42, 0.5) !important;
+  border: 1px solid #1E293B !important;
+  color: #FFFFFF !important;
+  border-radius: 1rem !important;
+}
+
+.dark-input:focus {
+  background-color: #0F172A !important;
+  border-color: #0EA5E9 !important;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1) !important;
+}
+
+.dark-input::placeholder {
+  color: #64748B !important;
+}
+
+/* Input with left icon padding inside dark inputs */
+.dark-input-icon {
+  padding-left: 2.75rem !important;
+}
+
+/* ==================== GLASS MORPHISM ==================== */
+.glass {
+  background-color: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-dark {
+  background-color: rgba(15, 23, 42, 0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ==================== PREMIUM CARD ==================== */
+.card-premium {
+  background: #FFFFFF;
+  border-radius: 1.25rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card-premium:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 16px 40px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ==================== GRADIENTS ==================== */
+.gradient-brand {
+  background: linear-gradient(135deg, #0EA5E9 0%, #6366F1 100%);
+}
+
+.gradient-dark {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+}
+
+.gradient-sports {
+  background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 50%, #7C3AED 100%);
+}
+
+/* ==================== NAVBAR ==================== */
+.navbar-glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(14, 165, 233, 0.6); }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-slide-down { animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-slide-in-right { animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-fade-in { animation: fadeIn 0.4s ease-out; }
+.animate-pulse-soft { animation: pulse-soft 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+.animate-bounce-subtle { animation: bounce-subtle 2s ease-in-out infinite; }
+.animate-glow-pulse { animation: glow-pulse 2s ease-in-out infinite; }
+.animate-ping { animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* ==================== SCROLLBAR STYLING ==================== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background-color: #F1F5F9; border-radius: 99px; }
+::-webkit-scrollbar-thumb { background-color: #CBD5E1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background-color: #94A3B8; }
+
+/* ==================== FOCUS STATES ==================== */
+:focus-visible {
+  outline: 2px solid #0EA5E9;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==================== BADGE ==================== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ==================== SIDEBAR ADMIN ==================== */
+.admin-sidebar {
+  background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6875rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94A3B8;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+
+.admin-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #E2E8F0;
+}
+
+.admin-sidebar-link.active {
+  background: rgba(14, 165, 233, 0.15);
+  color: #38BDF8;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+/* ==================== TABLE ==================== */
+.table-modern th {
+  background: #F8FAFC;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748B;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.table-modern td {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+}
+
+.table-modern tr:last-child td { border-bottom: none; }
+
+.table-modern tbody tr {
+  transition: background-color 150ms ease;
+}
+
+.table-modern tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* ==================== BUTTONS ==================== */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6875rem 1.5rem;
+  background: linear-gradient(135deg, #0EA5E9, #0284C7);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.3);
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0284C7, #0369A1);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+  color: white;
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6875rem 1.5rem;
+  background: white;
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.875rem;
+  border: 1.5px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 200ms ease;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+  color: #334155;
+}
+
+/* ==================== HERO PATTERN ==================== */
+.hero-pattern {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+}
+
+/* ==================== STAT CARD ==================== */
+.stat-card {
+  background: white;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+  transition: all 200ms ease;
+  text-decoration: none;
+  display: block;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0EA5E9, #6366F1);
+  border-radius: 9999px 9999px 0 0;
+}
+
+.stat-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ==================== STATUS BADGES ==================== */
+.status-pending {
+  background: #FEF9C3;
+  color: #854D0E;
+  border: 1px solid #FEF08A;
+}
+
+.status-paid,
+.status-confirmed {
+  background: #DCFCE7;
+  color: #14532D;
+  border: 1px solid #BBF7D0;
+}
+
+.status-cancelled {
+  background: #FEE2E2;
+  color: #7F1D1D;
+  border: 1px solid #FECACA;
+}
+
+/* ==================== FIELD CARD ANIMATION ==================== */
+.field-card-animated {
+  background: linear-gradient(145deg, #064e3b 0%, #065f46 30%, #047857 60%, #059669 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.field-card-animated::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 70%
+  );
+  animation: shimmer 4s linear infinite;
+  background-size: 200% 200%;
+}
+
+/* ==================== INPUT ICON GROUP ==================== */
+.input-group { position: relative; }
+
+.input-group .input-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94A3B8;
+}
+
+.input-group input,
+.input-group select {
+  padding-left: 2.75rem;
+}
+
+/* ==================== SECTION DIVIDER ==================== */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #E2E8F0 30%, #E2E8F0 70%, transparent);
+}
+
+/* ==================== RESPONSIVE NAV ==================== */
+.nav-link-active {
+  color: #0EA5E9;
+  background: rgba(14, 165, 233, 0.08);
+  font-weight: 600;
+}
+
+/* ==================== TICKET STYLE ==================== */
+.ticket-perforated { position: relative; }
+
+.ticket-perforated::before,
+.ticket-perforated::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: #F8FAFC;
+  z-index: 10;
+}
+
+.ticket-perforated::before { left: -0.75rem; }
+.ticket-perforated::after { right: -0.75rem; }
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+  .no-print { display: none !important; }
+  nav, footer { display: none !important; }
+  body { background: white; }
+}
+
+/* ==================== MOBILE ==================== */
+@media (max-width: 640px) {
+  .card-premium { border-radius: 1rem; }
+
+  h1 { font-size: clamp(2rem, 8vw, 4rem); }
+}
+
+/* ==================== ALPINE X-CLOAK FIX ==================== */
+[x-cloak] { display: none !important; }
+
+/* ==================== UTILITY OVERRIDES ==================== */
+/* Fix untuk kelas opacity yang dipakai di template */
+.bg-brand-opacity-5 { background-color: rgba(14, 165, 233, 0.05); }
+.bg-brand-opacity-8 { background-color: rgba(14, 165, 233, 0.08); }
+.bg-brand-opacity-10 { background-color: rgba(14, 165, 233, 0.10); }
+.bg-brand-opacity-15 { background-color: rgba(14, 165, 233, 0.15); }
+.bg-brand-opacity-20 { background-color: rgba(14, 165, 233, 0.20); }
+.bg-white-opacity-6 { background-color: rgba(255, 255, 255, 0.06); }
+.bg-white-opacity-8 { background-color: rgba(255, 255, 255, 0.08); }
+.bg-white-opacity-10 { background-color: rgba(255, 255, 255, 0.10); }
+
+/* ==================== AUTH PAGE FIXES ==================== */
+/* Fix min-h-screen for auth pages to not show huge empty gap before footer */
+.auth-page-wrapper {
+  min-height: calc(100vh - 4.25rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fix select dropdown arrow for dark inputs */
+.dark-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748B' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+  padding-right: 2.5rem !important;
+}
+
+/* ==================== BOOKING & TURNAMEN FORM FIXES ==================== */
+/* Light form inputs with consistent styling */
+.form-input-light {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1.5px solid #E2E8F0;
+  background-color: rgba(255,255,255,0.7);
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  color: #0F172A;
+  font-weight: 500;
+  transition: all 200ms ease;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input-light:focus {
+  border-color: #0EA5E9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+  background-color: #FFFFFF;
+}
+
+.form-input-light:disabled {
+  background-color: #F1F5F9;
+  color: #94A3B8;
+  cursor: not-allowed;
+}
+
+/* ==================== TURNAMEN FORM INPUT GROUP ==================== */
+.input-group-fixed {
+  position: relative;
+}
+
+.input-group-fixed .input-icon-fixed {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #94A3B8;
+  z-index: 1;
+}
+
+.input-group-fixed input {
+  padding-left: 2.75rem;
+}
