@@ -6,6 +6,9 @@ use App\Models\Booking;
 use App\Models\Turnamen;
 use App\Models\Pertandingan;
 use App\Models\User;
+use App\Models\HariLibur;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -221,5 +224,41 @@ class AdminController extends Controller
     {
         $user->delete();
         return back()->with('success', 'User berhasil dihapus.');
+    }
+
+    // ─── Kelola Tanggal Libur ───────────────────────────────────────────────
+
+    public function liburIndex()
+    {
+        $liburs = HariLibur::orderBy('tanggal', 'asc')->get();
+        return view('admin.libur.index', compact('liburs'));
+    }
+
+    public function liburStore(Request $request)
+    {
+        $request->validate([
+            'tanggal'    => ['required', 'date', 'after_or_equal:today'],
+            'keterangan' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $exists = HariLibur::whereDate('tanggal', $request->tanggal)->exists();
+        if ($exists) {
+            return back()->with('error', 'Tanggal tersebut sudah ditandai sebagai hari libur.');
+        }
+
+        HariLibur::create([
+            'tanggal'    => $request->tanggal,
+            'keterangan' => $request->keterangan,
+            'id_user'    => Auth::id(),
+        ]);
+
+        return back()->with('success', 'Tanggal libur berhasil ditambahkan.');
+    }
+
+    public function liburDelete($id)
+    {
+        $libur = HariLibur::findOrFail($id);
+        $libur->delete();
+        return back()->with('success', 'Tanggal libur berhasil dihapus.');
     }
 }

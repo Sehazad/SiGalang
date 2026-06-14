@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lapangan;
 use App\Models\Alat;
 use App\Models\Booking;
+use App\Models\HariLibur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -15,7 +16,15 @@ class BookingController extends Controller
     {
         $lapangans = Lapangan::all();
         $alats     = Alat::all();
-        return view('booking.create', compact('lapangans', 'alats'));
+
+        // Tanggal libur (60 hari ke depan) untuk dinonaktifkan di date picker
+        $liburDates = HariLibur::whereDate('tanggal', '>=', Carbon::today())
+            ->whereDate('tanggal', '<=', Carbon::today()->addDays(60))
+            ->get()
+            ->mapWithKeys(fn ($l) => [$l->tanggal->format('Y-m-d') => $l->keterangan ?? 'Hari Libur'])
+            ->toArray();
+
+        return view('booking.create', compact('lapangans', 'alats', 'liburDates'));
     }
 
     /**
@@ -36,6 +45,15 @@ class BookingController extends Controller
         // Jika lapangan atau tanggal belum dipilih, kembalikan semua jam
         if (!$tanggal || !$id_lapangan) {
             return response()->json(['available_hours' => $allHours]);
+        }
+
+        // Jika tanggal adalah hari libur, tidak ada jadwal tersedia
+        if (HariLibur::isLibur($tanggal)) {
+            return response()->json([
+                'available_hours' => [],
+                'is_holiday'      => true,
+                'holiday_reason'  => HariLibur::keteranganFor($tanggal),
+            ]);
         }
 
         // Ambil jam yang sudah dibooking (status paid atau pending)
@@ -62,6 +80,12 @@ class BookingController extends Controller
             'jam_mulai'    => 'required',
             'alats'        => 'nullable|array',
         ]);
+
+        // Blokir booking pada hari libur
+        if (HariLibur::isLibur($request->tanggal_main)) {
+            $alasan = HariLibur::keteranganFor($request->tanggal_main);
+            return back()->with('error', 'Tanggal yang dipilih adalah hari libur (' . $alasan . '). Silakan pilih tanggal lain.');
+        }
 
         // Anti-bentrok: cek apakah jam sudah dibooking
         $isBooked = Booking::where('id_lapangan', $request->id_lapangan)

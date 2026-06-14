@@ -69,6 +69,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/users/create',     [\App\Http\Controllers\AdminController::class, 'usersCreate'])->name('admin.users.create');
         Route::post('/admin/users/{id}/edit',  [\App\Http\Controllers\AdminController::class, 'usersUpdate'])->name('admin.users.update');
         Route::post('/admin/users/{id}/delete',[\App\Http\Controllers\AdminController::class, 'usersDelete'])->name('admin.users.delete');
+
+        // Kelola Tanggal Libur
+        Route::get('/admin/libur',              [\App\Http\Controllers\AdminController::class, 'liburIndex'])->name('admin.libur.index');
+        Route::post('/admin/libur',             [\App\Http\Controllers\AdminController::class, 'liburStore'])->name('admin.libur.store');
+        Route::post('/admin/libur/{id}/delete', [\App\Http\Controllers\AdminController::class, 'liburDelete'])->name('admin.libur.delete');
     });
 });
 

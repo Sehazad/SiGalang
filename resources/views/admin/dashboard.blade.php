@@ -46,6 +46,11 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3"/></svg>
                         Turnamen
                     </a>
+                    <a href="{{ route('admin.libur.index') }}"
+                       class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 border border-white/15 text-white text-sm font-bold rounded-xl hover:bg-white/15 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75"/></svg>
+                        Tanggal Libur
+                    </a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="inline-flex items-center gap-2 px-4 py-2.5 bg-red-500/15 border border-red-500/25 text-red-400 text-sm font-bold rounded-xl hover:bg-red-500/25 transition">
@@ -143,6 +148,7 @@
                 [route('admin.users.index'), 'Kelola Pengguna', 'Manajemen akun user', 'from-purple-500 to-indigo-600', 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952'],
                 [route('admin.checkin'), 'Scanner Check-in', 'Verifikasi tiket masuk', 'from-emerald-500 to-teal-600', 'M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5'],
                 [route('admin.turnamen.index'), 'Kelola Turnamen', 'Generate bracket otomatis', 'from-amber-500 to-orange-500', 'M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3'],
+                [route('admin.libur.index'), 'Tanggal Libur', 'Atur hari arena tutup', 'from-rose-500 to-red-600', 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25'],
             ] as [$url, $title, $desc, $grad, $icon])
                 <a href="{{ $url }}" class="bg-white border border-slate-200 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-200 group">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br {{ $grad }} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform">
